@@ -9,18 +9,43 @@ namespace SQLiteExample
 {
     public class SQLitor
     {
+        protected string DbPath = Application.StartupPath;
+        protected string DbFile = "Data.db";
+
         protected SQLiteConnection connection = new SQLiteConnection();
+        protected string commandCreateDataBase =
+            @"CREATE TABLE IF NOT EXISTS NewDataBase (
+				_AI      INTEGER  PRIMARY KEY AUTOINCREMENT,
+				DateTime DATETIME,
+				Topic    TEXT,
+				Message  TEXT
+			);";
 
-        protected string LogPath { get; private set; } = "C:\\Logs";
-        protected string LogFile { get; private set; } = "Log.db";
-
-        public void Setup(string logPath="Logs",string logFile="Log.db")
+        public SQLitor(string dbPath = "Datas", string dbFile = "Data.db")
         {
-            LogPath = Application.StartupPath + "\\" + logPath;
-            LogFile = logFile;
+            DbPath = Application.StartupPath + "\\" + dbPath;
+            DbFile = dbFile;
 
+            Setup();
+        }
+
+        protected void Setup()
+        {
             connection.Open();
+        }
 
+        public void CommandExcute(string sqlCommand)
+        {
+            //  DB目錄不存在就建立一個
+            if (!Directory.Exists(DbPath))
+                Directory.CreateDirectory(DbPath);
+
+            //  DB檔案不存在就建立一個
+            if (!File.Exists(DbFile))
+                Directory.CreateDirectory(DbPath + "\\" + DbFile);
+
+            var DataSource = DbPath + DbFile;
+            connection.ConnectionString = "Data source = " + DataSource;
         }
     }
 }
