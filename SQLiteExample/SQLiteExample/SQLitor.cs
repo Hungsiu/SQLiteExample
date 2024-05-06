@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Data.SQLite;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,6 +36,8 @@ namespace SQLiteExample
          *      );
          * 
          * 
+         *      datetime('now', 'localtime') 
+         * 
          */
 
 
@@ -47,11 +50,11 @@ namespace SQLiteExample
 
         public SQLitor(string dbPath = "Datas", string dbFile = "Data.db", string tableName = "NewTable")
         {
-            DbPath = Application.StartupPath + "\\" + dbPath;
+            DbPath = Environment.CurrentDirectory + "\\" + dbPath;
             DbFile = dbFile;
             TableName = tableName;
             commandCreateTable = "CREATE TABLE IF NOT EXISTS " + TableName + " (_AI INTEGER PRIMARY KEY AUTOINCREMENT,DateTime DATETIME,Topic TEXT,Message TEXT);";
-            
+
             Setup();
         }
 
@@ -61,17 +64,17 @@ namespace SQLiteExample
             if (!Directory.Exists(DbPath))
                 Directory.CreateDirectory(DbPath);
 
+            var dbFilePath = DbPath + "\\" + DbFile;
             //  DB檔案不存在就建立一個
-            if (!File.Exists(DbFile))
-                Directory.CreateDirectory(DbPath + "\\" + DbFile);
+            if (!File.Exists(dbFilePath))
+                File.Create(dbFilePath);
 
-            //  SQLite連線處
-            var DataSource = DbPath + DbFile;
-            connection.ConnectionString = "Data source = " + DataSource;
+            //  SQLite連線
+            connection.ConnectionString = "Data source = " + dbFilePath;
 
             connection.Open();
             CommandExcute(commandCreateTable);
-
+            connection.Close();
         }
 
         public void CommandExcute(string sqlCommand)
