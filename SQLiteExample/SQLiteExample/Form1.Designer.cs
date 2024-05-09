@@ -36,10 +36,12 @@
             label3 = new Label();
             label4 = new Label();
             textBoxMessage = new TextBox();
-            comboBox1 = new ComboBox();
+            comboBoxTopic = new ComboBox();
             buttonInsert = new Button();
             dataGridViewDBData = new DataGridView();
             labelStatus = new Label();
+            labelInsertTestData = new Label();
+            buttonSelete = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridViewDBData).BeginInit();
             SuspendLayout();
             // 
@@ -79,7 +81,7 @@
             // 
             // buttonSetup
             // 
-            buttonSetup.Location = new Point(224, 27);
+            buttonSetup.Location = new Point(247, 27);
             buttonSetup.Name = "buttonSetup";
             buttonSetup.Size = new Size(75, 23);
             buttonSetup.TabIndex = 4;
@@ -113,27 +115,28 @@
             textBoxMessage.Size = new Size(206, 67);
             textBoxMessage.TabIndex = 8;
             // 
-            // comboBox1
+            // comboBoxTopic
             // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(12, 82);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(121, 23);
-            comboBox1.TabIndex = 9;
+            comboBoxTopic.FormattingEnabled = true;
+            comboBoxTopic.Location = new Point(12, 82);
+            comboBoxTopic.Name = "comboBoxTopic";
+            comboBoxTopic.Size = new Size(121, 23);
+            comboBoxTopic.TabIndex = 9;
             // 
             // buttonInsert
             // 
-            buttonInsert.Location = new Point(224, 170);
+            buttonInsert.Location = new Point(247, 141);
             buttonInsert.Name = "buttonInsert";
             buttonInsert.Size = new Size(75, 23);
             buttonInsert.TabIndex = 10;
             buttonInsert.Text = "Insert";
             buttonInsert.UseVisualStyleBackColor = true;
+            buttonInsert.Click += buttonInsert_Click;
             // 
             // dataGridViewDBData
             // 
             dataGridViewDBData.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewDBData.Location = new Point(12, 211);
+            dataGridViewDBData.Location = new Point(12, 199);
             dataGridViewDBData.Name = "dataGridViewDBData";
             dataGridViewDBData.Size = new Size(287, 150);
             dataGridViewDBData.TabIndex = 11;
@@ -141,21 +144,43 @@
             // labelStatus
             // 
             labelStatus.AutoSize = true;
-            labelStatus.Location = new Point(12, 375);
+            labelStatus.Location = new Point(12, 357);
             labelStatus.Name = "labelStatus";
-            labelStatus.Size = new Size(53, 15);
+            labelStatus.Size = new Size(43, 30);
             labelStatus.TabIndex = 12;
-            labelStatus.Text = "Initialize";
+            labelStatus.Text = "第一行\r\n第二行";
+            // 
+            // labelInsertTestData
+            // 
+            labelInsertTestData.AutoSize = true;
+            labelInsertTestData.Location = new Point(250, 7);
+            labelInsertTestData.Name = "labelInsertTestData";
+            labelInsertTestData.Size = new Size(67, 15);
+            labelInsertTestData.TabIndex = 13;
+            labelInsertTestData.Text = "　　　　　";
+            labelInsertTestData.Click += labelInsertTestData_Click;
+            // 
+            // buttonSelete
+            // 
+            buttonSelete.Location = new Point(247, 170);
+            buttonSelete.Name = "buttonSelete";
+            buttonSelete.Size = new Size(75, 23);
+            buttonSelete.TabIndex = 14;
+            buttonSelete.Text = "Selete";
+            buttonSelete.UseVisualStyleBackColor = true;
+            buttonSelete.Click += buttonSelete_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(326, 415);
+            ClientSize = new Size(334, 396);
+            Controls.Add(buttonSelete);
+            Controls.Add(labelInsertTestData);
             Controls.Add(labelStatus);
             Controls.Add(dataGridViewDBData);
             Controls.Add(buttonInsert);
-            Controls.Add(comboBox1);
+            Controls.Add(comboBoxTopic);
             Controls.Add(textBoxMessage);
             Controls.Add(label4);
             Controls.Add(label3);
@@ -165,7 +190,7 @@
             Controls.Add(textBoxDbFileName);
             Controls.Add(label1);
             Name = "Form1";
-            Text = "Form1";
+            Text = "SQLite Example Form";
             ((System.ComponentModel.ISupportInitialize)dataGridViewDBData).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -181,9 +206,11 @@
         private Label label3;
         private Label label4;
         private TextBox textBoxMessage;
-        private ComboBox comboBox1;
+        private ComboBox comboBoxTopic;
         private Button buttonInsert;
         private DataGridView dataGridViewDBData;
         private Label labelStatus;
+        private Label labelInsertTestData;
+        private Button buttonSelete;
     }
 }

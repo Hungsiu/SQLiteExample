@@ -62,27 +62,42 @@ namespace SQLiteExample
         {
             //  DB目錄不存在就建立一個
             if (!Directory.Exists(DbPath))
+            {
+                Debug.WriteLine("目錄不存在，即將建立新目錄: " + DbPath);
                 Directory.CreateDirectory(DbPath);
+                Task.Delay(100).Wait();
+            }
 
             var dbFilePath = DbPath + "\\" + DbFile;
             //  DB檔案不存在就建立一個
             if (!File.Exists(dbFilePath))
-                File.Create(dbFilePath);
+            {
+                Debug.WriteLine("檔案不存在，即將建立新檔: " + dbFilePath);
+                SQLiteConnection.CreateFile(dbFilePath);
+            }
 
             //  SQLite連線
             connection.ConnectionString = "Data source = " + dbFilePath;
-
-            connection.Open();
+            Debug.WriteLine("確認資料庫表單是否存在: " + commandCreateTable);
             CommandExcute(commandCreateTable);
-            connection.Close();
         }
 
-        public void CommandExcute(string sqlCommand)
+        public void Insert(string topic, string message)
         {
+            var commandString = "INSERT OR IGNORE INTO `" + TableName + "` VALUES (null ,datetime('now', 'localtime') ,'" + topic + "','" + message + "')"; ;
+            CommandExcute(commandString);
+        }
+
+        protected void CommandExcute(string sqlCommand)
+        {
+            connection.Open();
+
             using (var command = new SQLiteCommand(sqlCommand, connection))
             {
                 command.ExecuteNonQuery();
             }
+
+            connection.Close();
         }
     }
 }
