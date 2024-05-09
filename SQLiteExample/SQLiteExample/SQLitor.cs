@@ -88,6 +88,11 @@ namespace SQLiteExample
             CommandExcute(commandString);
         }
 
+        public void Select()
+        {
+
+        }
+
         protected void CommandExcute(string sqlCommand)
         {
             connection.Open();

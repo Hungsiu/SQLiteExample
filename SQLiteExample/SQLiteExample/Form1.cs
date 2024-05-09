@@ -66,9 +66,16 @@ namespace SQLiteExample
             }
         }
 
-        private void buttonSelete_Click(object sender, EventArgs e)
+        private void buttonSelect_Click(object sender, EventArgs e)
         {
+            try
+            {
 
+            }
+            catch (Exception ex)
+            {
+                Status = "Has an error when select.\r\n" + ex.Message;
+            }
         }
 
         private void labelInsertTestData_Click(object sender, EventArgs e)

@@ -41,7 +41,7 @@
             dataGridViewDBData = new DataGridView();
             labelStatus = new Label();
             labelInsertTestData = new Label();
-            buttonSelete = new Button();
+            buttonSelect = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridViewDBData).BeginInit();
             SuspendLayout();
             // 
@@ -160,22 +160,22 @@
             labelInsertTestData.Text = "　　　　　";
             labelInsertTestData.Click += labelInsertTestData_Click;
             // 
-            // buttonSelete
+            // buttonSelect
             // 
-            buttonSelete.Location = new Point(247, 170);
-            buttonSelete.Name = "buttonSelete";
-            buttonSelete.Size = new Size(75, 23);
-            buttonSelete.TabIndex = 14;
-            buttonSelete.Text = "Selete";
-            buttonSelete.UseVisualStyleBackColor = true;
-            buttonSelete.Click += buttonSelete_Click;
+            buttonSelect.Location = new Point(247, 170);
+            buttonSelect.Name = "buttonSelect";
+            buttonSelect.Size = new Size(75, 23);
+            buttonSelect.TabIndex = 14;
+            buttonSelect.Text = "Select";
+            buttonSelect.UseVisualStyleBackColor = true;
+            buttonSelect.Click += buttonSelect_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(334, 396);
-            Controls.Add(buttonSelete);
+            Controls.Add(buttonSelect);
             Controls.Add(labelInsertTestData);
             Controls.Add(labelStatus);
             Controls.Add(dataGridViewDBData);
@@ -211,6 +211,6 @@
         private DataGridView dataGridViewDBData;
         private Label labelStatus;
         private Label labelInsertTestData;
-        private Button buttonSelete;
+        private Button buttonSelect;
     }
 }
