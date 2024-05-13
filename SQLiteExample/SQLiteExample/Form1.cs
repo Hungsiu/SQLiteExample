@@ -45,7 +45,7 @@ namespace SQLiteExample
             }
             catch (Exception ex)
             {
-                Status = "Has an error when setup.\r\n" + ex.Message;
+                Status = "Has an error when setup." + Environment.NewLine + ex.Message;
             }
 
         }
@@ -62,7 +62,7 @@ namespace SQLiteExample
             }
             catch (Exception ex)
             {
-                Status = "Has an error when insert.\r\n" + ex.Message;
+                Status = "Has an error when insert." + Environment.NewLine + ex.Message;
             }
         }
 
@@ -70,11 +70,18 @@ namespace SQLiteExample
         {
             try
             {
+                var topic = comboBoxTopic.SelectedItem.ToString();
+                var keyword = textBoxMessage.Text;
 
+                Debug.WriteLine(topic + ":" + keyword);
+                sqlitor.Select(topic, keyword);
             }
             catch (Exception ex)
             {
-                Status = "Has an error when select.\r\n" + ex.Message;
+                var errorMessage = "Has an error when select." + Environment.NewLine + ex.Message;
+                Status = errorMessage;
+                Debug.WriteLine(errorMessage);
+
             }
         }
 

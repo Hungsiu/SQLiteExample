@@ -40,7 +40,7 @@ namespace SQLiteExample
          * 
          */
 
-
+        protected bool setuped = false;
         protected string DbPath = "Path";
         protected string DbFile = "Data.db";
         protected string TableName = string.Empty;
@@ -80,29 +80,56 @@ namespace SQLiteExample
             connection.ConnectionString = "Data source = " + dbFilePath;
             Debug.WriteLine("確認資料庫表單是否存在: " + commandCreateTable);
             CommandExcute(commandCreateTable);
+
+            setuped = true;
         }
 
         public void Insert(string topic, string message)
         {
-            var commandString = "INSERT OR IGNORE INTO `" + TableName + "` VALUES (null ,datetime('now', 'localtime') ,'" + topic + "','" + message + "')"; ;
+            if (!setuped)
+            {
+                return;
+            }
+
+            var commandString = "INSERT OR IGNORE INTO `" + TableName + "` VALUES (null ,DATETIME('now', 'localtime') ,'" + topic + "','" + message + "')"; ;
             CommandExcute(commandString);
         }
 
-        public void Select()
+        public void Select(string topic, string keyword)
         {
+            if (!setuped)
+            {
+                return;
+            }
 
+            List<string> topicData = new List<string>();
+
+            var commandString = "SELECT * FROM " + TableName + " WHERE `Topic` =='" + topic + "' AND `Message` LIKE '%" + keyword + "%'";
+            Debug.WriteLine("Command : " + commandString);
+            var results = CommandExcute(commandString).ExecuteReader();
+
+            while (results.Read())
+            {
+                var msg = string.Format("{0},{1},{2},{3}",results.GetString(0),results.GetString(1),results.GetString(2),results.GetString(3));
+                Debug.WriteLine(msg);
+            }
         }
 
-        protected void CommandExcute(string sqlCommand)
+        protected SQLiteCommand CommandExcute(string sqlCommand)
         {
+            SQLiteCommand result;
+
             connection.Open();
 
             using (var command = new SQLiteCommand(sqlCommand, connection))
             {
                 command.ExecuteNonQuery();
+                result = command;
             }
 
-            connection.Close();
+            connection.Clone();
+
+            return result;
         }
     }
 }
