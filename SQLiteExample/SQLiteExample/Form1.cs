@@ -8,11 +8,12 @@ namespace SQLiteExample
         private SQLitor sqlitor;
 
         private string DbName => textBoxDbFileName.Text;
+
         private string TbName => textBoxTableName.Text;
 
         private bool setuped = false;
 
-        private string Topic => comboBoxTopic.SelectedText;
+        private string Topic => comboBoxTopic.Text;
 
         private string Message => textBoxMessage.Text;
 
@@ -79,13 +80,9 @@ namespace SQLiteExample
         {
             try
             {
-                //var topic = comboBoxTopic.SelectedItem as string;
-                //var message = textBoxMessage.Text;
-
-                // PRAGMA table_info('MyTable')
                 sqlitor.Insert(Topic,Message);
 
-                Status = "Data inserted";
+                Status =  "Data inserted";
             }
             catch (Exception ex)
             {
@@ -97,17 +94,16 @@ namespace SQLiteExample
         {
             try
             {
-                var topic = comboBoxTopic.SelectedItem.ToString();
                 var keywords = textBoxMessage.Text.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
 
                 List<string> keywordList = new List<string>();
                 for (int i = 0; i < keywords.Length; i++)
                 {
-                    Debug.WriteLine("Keyword : " + keywords[i]);
+                    //Debug.WriteLine("Keyword : " + keywords[i]);
                     keywordList.Add(keywords[i]);
                 }
 
-                dataGridViewDBData.DataSource = sqlitor.Select(topic, keywordList).ToArray();
+                dataGridViewDBData.DataSource = sqlitor.Select(Topic, keywordList).ToArray();
 
                 Status = "Select finished";
             }
@@ -115,7 +111,6 @@ namespace SQLiteExample
             {
                 var errorMessage = "Has an error when select." + Environment.NewLine + ex.Message;
                 Status = errorMessage;
-                Debug.WriteLine(errorMessage);
             }
         }
 

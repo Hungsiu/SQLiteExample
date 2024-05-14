@@ -103,9 +103,9 @@
             label4.AutoSize = true;
             label4.Location = new Point(12, 108);
             label4.Name = "label4";
-            label4.Size = new Size(31, 15);
+            label4.Size = new Size(79, 15);
             label4.TabIndex = 7;
-            label4.Text = "訊息";
+            label4.Text = "關鍵字／訊息";
             // 
             // textBoxMessage
             // 
