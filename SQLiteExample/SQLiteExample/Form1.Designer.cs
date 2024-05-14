@@ -123,6 +123,7 @@
             comboBoxTopic.Name = "comboBoxTopic";
             comboBoxTopic.Size = new Size(121, 23);
             comboBoxTopic.TabIndex = 9;
+            comboBoxTopic.DropDown += comboBoxTopic_DropDown;
             // 
             // buttonInsert
             // 
@@ -150,6 +151,7 @@
             labelStatus.Size = new Size(43, 30);
             labelStatus.TabIndex = 12;
             labelStatus.Text = "第一行\r\n第二行";
+            labelStatus.Click += labelStatus_Click;
             // 
             // labelInsertTestData
             // 

@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SQLiteExample
 {
@@ -78,10 +79,19 @@ namespace SQLiteExample
 
             //  SQLite連線
             connection.ConnectionString = "Data source = " + dbFilePath;
+            connection.Open();
             Debug.WriteLine("確認資料庫表單是否存在: " + commandCreateTable);
             CommandExcute(commandCreateTable);
 
             setuped = true;
+        }
+
+        public void Close()
+        {
+            if (setuped)
+            {
+                connection.Close();
+            }
         }
 
         public void Insert(string topic, string message)
@@ -95,31 +105,101 @@ namespace SQLiteExample
             CommandExcute(commandString);
         }
 
-        public void Select(string topic, string keyword)
+        public Dictionary<string, string>? Select(string topic, List<string> keywords, bool orLogic = false)
         {
             if (!setuped)
             {
-                return;
+                return null;
             }
 
-            List<string> topicData = new List<string>();
+            Dictionary<string, string> selectData = new Dictionary<string, string>();
 
-            var commandString = "SELECT * FROM " + TableName + " WHERE `Topic` =='" + topic + "' AND `Message` LIKE '%" + keyword + "%'";
-            Debug.WriteLine("Command : " + commandString);
-            var results = CommandExcute(commandString).ExecuteReader();
+            var commandString = "SELECT * FROM " + TableName + " WHERE `Topic` =='" + topic + "' ";
 
-            while (results.Read())
+            foreach (var keyword in keywords)
             {
-                var msg = string.Format("{0},{1},{2},{3}",results.GetString(0),results.GetString(1),results.GetString(2),results.GetString(3));
-                Debug.WriteLine(msg);
+                if (orLogic)
+                {
+                    commandString += "OR `Message` LIKE '%" + keyword + "%' ";
+                }
+                else
+                {
+                    commandString += "AND `Message` LIKE '%" + keyword + "%' ";
+                }
             }
+            Debug.WriteLine("Command : " + commandString);
+
+            var sqlcommand = new SQLiteCommand(commandString, connection);
+            using (SQLiteDataReader reader = sqlcommand.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    var topicdata = reader["_AI"].ToString();
+                    var messagedata = reader["Message"].ToString();
+                    //Debug.WriteLine("Select [{0}]:{1}", topicdata, messagedata);
+
+                    selectData.Add(
+                        topicdata,
+                        messagedata
+                    );
+                }
+            }
+
+            return selectData;
+        }
+
+        public List<string> GetColumnName()
+        {
+            List<string> columns = new List<string>();
+
+            var commandString = "PRAGMA table_info('" + TableName + "')";
+            var sqlcommand = new SQLiteCommand(commandString, connection);
+            using (SQLiteDataReader reader = sqlcommand.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    //  0=編號,1=名稱,2=資料型態
+                    var name = reader[1].ToString();
+                    columns.Add(name);
+                }
+            }
+
+            return columns;
+        }
+
+        public List<string> GetTopicType()
+        {
+            List<string> topics = new List<string>();
+            HashSet<string> uniqueTopic = new HashSet<string>();
+
+            var commandString = "SELECT `Topic` FROM " + TableName;
+            var sqlcommand = new SQLiteCommand(commandString, connection);
+
+
+            using (SQLiteDataReader reader = sqlcommand.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    //  0=編號,1=名稱,2=資料型態
+                    var topic = reader[0].ToString();
+                    uniqueTopic.Add(topic);
+                }
+            }
+
+            foreach (var topic in uniqueTopic)
+            {
+                //Debug.WriteLine("Topic : " + topic);
+                topics.Add(topic);
+            }
+
+            return topics;
         }
 
         protected SQLiteCommand CommandExcute(string sqlCommand)
         {
             SQLiteCommand result;
 
-            connection.Open();
+            //connection.Open();
 
             using (var command = new SQLiteCommand(sqlCommand, connection))
             {
@@ -127,7 +207,7 @@ namespace SQLiteExample
                 result = command;
             }
 
-            connection.Clone();
+            //connection.Clone();
 
             return result;
         }

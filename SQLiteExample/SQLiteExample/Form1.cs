@@ -10,7 +10,13 @@ namespace SQLiteExample
         private string DbName => textBoxDbFileName.Text;
         private string TbName => textBoxTableName.Text;
 
-        private string Status { set { Invoke(() => { labelStatus.Text = value; }); } }
+        private bool setuped = false;
+
+        private string Topic => comboBoxTopic.SelectedText;
+
+        private string Message => textBoxMessage.Text;
+
+        private string Status { get { return labelStatus.Text; } set { Invoke(() => { labelStatus.Text = value; }); } }
 
         private enum TopicType
         {
@@ -32,7 +38,17 @@ namespace SQLiteExample
                 comboBoxTopic.DataSource = Enum.GetValues(typeof(TopicType));
                 comboBoxTopic.SelectedIndex = 0;
 
+                setuped = false;
+
                 Status = "Initialized";
+            };
+
+            FormClosing += (s, e) =>
+            {
+                if (setuped)
+                {
+                    sqlitor.Close();
+                }
             };
         }
 
@@ -40,8 +56,17 @@ namespace SQLiteExample
         {
             try
             {
-                sqlitor = new SQLitor("Datas", DbName + ".db", TbName);
-                Status = "Setup finished";
+                if (!setuped)
+                {
+                    sqlitor = new SQLitor("Datas", DbName + ".db", TbName);
+                    setuped = true;
+                    Status = "Setup finished";
+                }
+                else
+                {
+                    Status = "DataBase is setuped";
+                }
+
             }
             catch (Exception ex)
             {
@@ -57,6 +82,8 @@ namespace SQLiteExample
                 //var topic = comboBoxTopic.SelectedItem as string;
                 //var message = textBoxMessage.Text;
 
+                // PRAGMA table_info('MyTable')
+                sqlitor.Insert(Topic,Message);
 
                 Status = "Data inserted";
             }
@@ -71,17 +98,24 @@ namespace SQLiteExample
             try
             {
                 var topic = comboBoxTopic.SelectedItem.ToString();
-                var keyword = textBoxMessage.Text;
+                var keywords = textBoxMessage.Text.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
 
-                Debug.WriteLine(topic + ":" + keyword);
-                sqlitor.Select(topic, keyword);
+                List<string> keywordList = new List<string>();
+                for (int i = 0; i < keywords.Length; i++)
+                {
+                    Debug.WriteLine("Keyword : " + keywords[i]);
+                    keywordList.Add(keywords[i]);
+                }
+
+                dataGridViewDBData.DataSource = sqlitor.Select(topic, keywordList).ToArray();
+
+                Status = "Select finished";
             }
             catch (Exception ex)
             {
                 var errorMessage = "Has an error when select." + Environment.NewLine + ex.Message;
                 Status = errorMessage;
                 Debug.WriteLine(errorMessage);
-
             }
         }
 
@@ -109,8 +143,23 @@ namespace SQLiteExample
             }
             catch (Exception ex)
             {
-                Status = "Has an error when insert testdata.\r\n" + ex.Message;
+                Status = "Has an error when insert testdata." + Environment.NewLine + ex.Message;
             }
+        }
+
+        private void labelStatus_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(Status);
+        }
+
+        private void comboBoxTopic_DropDown(object sender, EventArgs e)
+        {
+            if (!setuped)
+            {
+                return;
+            }
+
+            comboBoxTopic.DataSource = sqlitor.GetTopicType();
         }
     }
 }
