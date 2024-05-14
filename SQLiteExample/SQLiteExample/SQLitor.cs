@@ -134,12 +134,12 @@ namespace SQLiteExample
             {
                 while (reader.Read())
                 {
-                    var topicdata = reader["_AI"].ToString();
+                    var ai = reader["_AI"].ToString();
                     var messagedata = reader["Message"].ToString();
                     //Debug.WriteLine("Select [{0}]:{1}", topicdata, messagedata);
 
                     selectData.Add(
-                        topicdata,
+                        ai,
                         messagedata
                     );
                 }

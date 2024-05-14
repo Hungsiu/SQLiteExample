@@ -114,7 +114,6 @@
             textBoxMessage.Name = "textBoxMessage";
             textBoxMessage.Size = new Size(206, 67);
             textBoxMessage.TabIndex = 8;
-            textBoxMessage.Text = "%測試用資料：%";
             // 
             // comboBoxTopic
             // 

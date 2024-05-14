@@ -36,8 +36,8 @@ namespace SQLiteExample
                 MaximizeBox = false;
                 FormBorderStyle = FormBorderStyle.FixedSingle;
 
-                comboBoxTopic.DataSource = Enum.GetValues(typeof(TopicType));
-                comboBoxTopic.SelectedIndex = 0;
+                //comboBoxTopic.DataSource = Enum.GetValues(typeof(TopicType));
+                //comboBoxTopic.SelectedIndex = 0;
 
                 setuped = false;
 
@@ -48,7 +48,7 @@ namespace SQLiteExample
             {
                 if (setuped)
                 {
-                    sqlitor.Close();
+                    sqlitor?.Close();
                 }
             };
         }
